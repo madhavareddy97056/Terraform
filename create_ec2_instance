@@ -9,7 +9,7 @@ resource "aws_instance" "test" {
     instance_type = "t2.micro"
     availability_zone = "ap-south-1a"
     key_name = "linuxkey"
-    count = 1
+    # count = 1
     vpc_security_group_ids = ["sg-02cd4172d34747bc7"] 
     tags = {
         Name = "test_mc"
