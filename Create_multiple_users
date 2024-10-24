@@ -1,0 +1,9 @@
+resource "aws_iam_user" "service_users" {
+    count = length(var.users)
+    name = var.users[count.index]
+}
+
+variable "users" {
+    type = list(any)
+    default = ["aws", "jenkins", "maven", "git"]
+}
