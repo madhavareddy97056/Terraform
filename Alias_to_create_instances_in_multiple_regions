@@ -1,0 +1,37 @@
+provider "aws" {
+  alias  = "mumbai"
+  region = "ap-south-1"
+}
+
+provider "aws" {
+  alias  = "nvirginia"
+  region = "us-east-1"
+}
+
+resource "aws_instance" "mum_instance" {
+  provider               = aws.mumbai
+  ami                    = "ami-04a37924ffe27da53"
+  instance_type          = "t2.micro"
+  availability_zone      = "ap-south-1a"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  tags = {
+    Name = "mum_mc"
+    ENV  = "dev"
+  }
+}
+
+resource "aws_instance" "nv_instance" {
+  provider               = aws.nvirginia
+  ami                    = "ami-06b21ccaeff8cd686"
+  instance_type          = "t2.micro"
+  availability_zone      = "us-east-1b"
+  key_name               = "nv_key"
+  vpc_security_group_ids = ["sg-07709164d640f6fda"]
+  tags = {
+    Name = "nv_mc"
+    ENV  = "dev"
+  }
+}
+
+
