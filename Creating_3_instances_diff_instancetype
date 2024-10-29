@@ -1,15 +1,25 @@
 # create 3 instance with different instance_types
+--------------------------------------------------
 
+# Mention provider
 provider "aws" {
   region = "ap-south-1"
 }
 
+# Declaring variables
 variable "itype" {
   description = "Declarilg list for instance_type"
   type        = list(string)
   default     = ["t2.nano", "t2.micro", "t2.small"]
 }
 
+variable "tag_names" {
+  description = "Declarilg list for tags"
+  type        = list(string)
+  default     = ["one_instance", "two_instance", "three_instance"]
+}
+
+# Creating 3 instances
 resource "aws_instance" "one" {
   ami                    = "ami-0dee22c13ea7a9a67"
   instance_type          = var.itype[0]
@@ -17,7 +27,7 @@ resource "aws_instance" "one" {
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
   tags = {
-    Name = "one_instance"
+    Name = var.tag_names[0]
   }
 }
 
@@ -28,7 +38,7 @@ resource "aws_instance" "two" {
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
   tags = {
-    Name = "two_instance"
+    Name = var.tag_names[1]
   }
 }
 
@@ -39,6 +49,6 @@ resource "aws_instance" "three" {
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
   tags = {
-    Name = "three_instance"
+    Name = var.tag_names[2]
   }
 }
