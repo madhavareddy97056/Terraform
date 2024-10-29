@@ -6,11 +6,23 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-# Declaring variables
+# Declaring variables in list format
+/*
 variable "itype" {
-  description = "Declarilg list for instance_type"
+  description = "Declaring list for instance_type"
   type        = list(string)
   default     = ["t2.nano", "t2.micro", "t2.small"]
+} */
+
+# Declaring variables in map format
+variable "itype" {
+  description = "Declaring map for instance_type"
+  type        = map(any)
+  default = {
+    "one"   = "t2.nano"
+    "two"   = "t2.small"
+    "three" = "t2.micro"
+  }
 }
 
 variable "images" {
@@ -28,7 +40,7 @@ variable "tag_names" {
 # Creating 3 instances
 resource "aws_instance" "one" {
   ami                    = var.images[0]
-  instance_type          = var.itype[0]
+  instance_type          = var.itype["one"]
   availability_zone      = "ap-south-1a"
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
@@ -39,7 +51,7 @@ resource "aws_instance" "one" {
 
 resource "aws_instance" "two" {
   ami                    = var.images[1]
-  instance_type          = var.itype[1]
+  instance_type          = var.itype["two"]
   availability_zone      = "ap-south-1b"
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
@@ -50,7 +62,7 @@ resource "aws_instance" "two" {
 
 resource "aws_instance" "three" {
   ami                    = var.images[2]
-  instance_type          = var.itype[2]
+  instance_type          = var.itype["three"]
   availability_zone      = "ap-south-1a"
   key_name               = "linuxkey"
   vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
