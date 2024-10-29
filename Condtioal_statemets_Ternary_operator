@@ -1,0 +1,50 @@
+# Conditional or  ternary operator example
+# ------------------------------------------
+
+provider "aws" {
+    region = "ap-south-1"
+}
+
+variable "itype" {
+  description = "Declaring list for instance_type"
+  type        = list(string)
+  default     = ["t2.nano", "t2.micro"]
+}
+
+variable "images" {
+  description = "Declarilg list for images"
+  type        = list(string)
+  default     = ["ami-04a37924ffe27da53", "ami-0dee22c13ea7a9a67"]
+}
+/*
+variable "tag_names" {
+    type = list(string)
+    default = ["nano_amazon", "t2_ubuntu"]
+} */
+
+variable "enter_environment_Dev_Test" {
+}
+
+resource "aws_instance" "Dev_env" {
+  ami                    = var.images[0]
+  instance_type          = var.itype[0]
+  availability_zone      = "ap-south-1b"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  count                  = var.enter_environment_Dev_Test == "Dev" ? 2 : 0
+  tags = {
+    Name = "Dev_env_machines"
+  }
+}
+
+resource "aws_instance" "Test_env" {
+  ami                    = var.images[1]
+  instance_type          = var.itype[1]
+  availability_zone      = "ap-south-1a"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  count                  = var.enter_environment_Dev_Test == "Test" ? 2 : 0
+  tags = {
+    Name = "Test_env_machines"
+  }
+}
