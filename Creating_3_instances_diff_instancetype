@@ -1,0 +1,44 @@
+# create 3 instance with different instance_types
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "itype" {
+  description = "Declarilg list for instance_type"
+  type        = list(string)
+  default     = ["t2.nano", "t2.micro", "t2.small"]
+}
+
+resource "aws_instance" "one" {
+  ami                    = "ami-0dee22c13ea7a9a67"
+  instance_type          = var.itype[0]
+  availability_zone      = "ap-south-1a"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  tags = {
+    Name = "one_instance"
+  }
+}
+
+resource "aws_instance" "two" {
+  ami                    = "ami-0dee22c13ea7a9a67"
+  instance_type          = var.itype[1]
+  availability_zone      = "ap-south-1b"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  tags = {
+    Name = "two_instance"
+  }
+}
+
+resource "aws_instance" "three" {
+  ami                    = "ami-0dee22c13ea7a9a67"
+  instance_type          = var.itype[2]
+  availability_zone      = "ap-south-1a"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  tags = {
+    Name = "three_instance"
+  }
+}
