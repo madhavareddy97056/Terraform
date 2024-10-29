@@ -1,5 +1,5 @@
 # create 3 instance with different instance_types
---------------------------------------------------
+#--------------------------------------------------
 
 # Mention provider
 provider "aws" {
