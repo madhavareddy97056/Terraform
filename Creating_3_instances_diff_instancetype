@@ -1,4 +1,4 @@
-# create 3 instance with different instance_types
+# create 3 instances with different instance_types, different AMI's
 #--------------------------------------------------
 
 # Mention provider
@@ -13,15 +13,21 @@ variable "itype" {
   default     = ["t2.nano", "t2.micro", "t2.small"]
 }
 
+variable "images" {
+  description = "Declarilg list for images"
+  type        = list(string)
+  default     = ["ami-04a37924ffe27da53", "ami-0dee22c13ea7a9a67", "ami-022ce6f32988af5fa"]
+}
+
 variable "tag_names" {
   description = "Declarilg list for tags"
   type        = list(string)
-  default     = ["one_instance", "two_instance", "three_instance"]
+  default     = ["one_instance_amazon", "two_instance_ubuntu", "three_instance_RHEL"]
 }
 
 # Creating 3 instances
 resource "aws_instance" "one" {
-  ami                    = "ami-0dee22c13ea7a9a67"
+  ami                    = var.images[0]
   instance_type          = var.itype[0]
   availability_zone      = "ap-south-1a"
   key_name               = "linuxkey"
@@ -32,7 +38,7 @@ resource "aws_instance" "one" {
 }
 
 resource "aws_instance" "two" {
-  ami                    = "ami-0dee22c13ea7a9a67"
+  ami                    = var.images[1]
   instance_type          = var.itype[1]
   availability_zone      = "ap-south-1b"
   key_name               = "linuxkey"
@@ -43,7 +49,7 @@ resource "aws_instance" "two" {
 }
 
 resource "aws_instance" "three" {
-  ami                    = "ami-0dee22c13ea7a9a67"
+  ami                    = var.images[2]
   instance_type          = var.itype[2]
   availability_zone      = "ap-south-1a"
   key_name               = "linuxkey"
