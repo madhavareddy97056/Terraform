@@ -1,0 +1,35 @@
+# Count.inex demo
+#--------------------------------
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "itype" {
+  description = "Declaring list for instance_type"
+  type        = list(string)
+  default     = ["t2.nano", "t2.micro", "t2.small"]
+}
+
+variable "images" {
+  description = "Declarilg list for images"
+  type        = list(string)
+  default     = ["ami-04a37924ffe27da53", "ami-0dee22c13ea7a9a67", "ami-022ce6f32988af5fa"]
+}
+
+variable "tag_names" {
+    type = list(string)
+    default = ["nano_amazon", "t2_ubuntu", "small_rhel"]
+}
+
+resource "aws_instance" "count-demo" {
+  ami                    = var.images[count.index]
+  instance_type          = var.itype[count.index]
+  availability_zone      = "ap-south-1b"
+  key_name               = "linuxkey"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  count                  = 3
+  tags = {
+    Name = var.tag_names[count.index]
+  }
+}
