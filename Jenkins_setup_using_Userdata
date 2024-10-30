@@ -1,0 +1,29 @@
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_key_pair" "pub-key" {
+  key_name   = "provision"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDY3ThgTNL5+qHoW1q0EHHS2eEuK8H1QxnE/WOqvkdyYxaqA4797Kam69tDjHNkNMJxi4dgqy8AdUxJW0TVq5p0QhUyLGaCbJTngddZB9Z3/yoIlEHcnm68229+3Ak8Bz3OEM9EXY5lLQUXeMKbSlSI37ASUMbQZv7S8zDcwrHCMpb/pbmI9cXe0r38jtwno6ka8QZ1Zld74AjR+IgpqbR8TLIkhueldj81Xns6Bj/kHszOHOdKVfUVvpHZZvXH2hPFxebr8QFSIvGK6uKI6fSMohk4H2Sv8ZzbT5Q60erEfQok5hQtLybEHm76LCsvAw7Zq16MKjkJ5owBZ6HaIPKd/gB5Nmd+xDrmbPBKa0MjMKsQPlGZYzlWonLQqwMJL2umT3XJrPVtW8JmShOYW+h/N0Uzjrf6Lw7EikxebHQ877yXpKJzJ9ifpnxouYJ67CAiVdNd6XoX/KrrcWQ3qfccvfG89lZ8k01OOElXV1bHwdc0kMdUt+nHNIRCPCW/BD0= madhava@MADHAVA-HP"
+}
+
+resource "aws_instance" "jenkins-server-ubuntu" {
+  ami                    = "ami-0dee22c13ea7a9a67"
+  availability_zone      = "ap-south-1a"
+  instance_type          = "t2.micro"
+  key_name               = "provision"
+  vpc_security_group_ids = ["sg-02cd4172d34747bc7"]
+  tags = {
+    Name = "Jenkins_server"
+  }
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo -i
+    apt update
+    apt install openjdk-17-jdk -y
+    wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+    apt update
+    apt install jenkins -y
+    EOF
+}
